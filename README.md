@@ -38,7 +38,7 @@ Tudo que for desenvolvido não será utilizado comercialmente e a única intenç
 ### Qual é o teste ?
 Imagine que a empresa foi contratada para participar de um projeto. Este projeto consiste na elaboração de um endpoint.
 
-A equipe de criação já fez o layout (fake, este foi comprado), a equipe de frontend fez a montagem (fake, a compra foi do template montado) e agora teremos a programação backend para fechar este projeto.
+A equipe de criação já fez o layout, a equipe de frontend fez a montagem e agora teremos a programação backend para fechar este projeto.
 
 ### O que deve ser feito ?
 - [ ] Modelagem de banco de dados para clientes. Os campos do cliente são: Nome, E-mail, Telefone, user_id (Todos os campos são Obrigatórios)
