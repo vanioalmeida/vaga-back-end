@@ -17,6 +17,7 @@ class CreateDependentsTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable(false);
             $table->string('email')->nullable(false);
+            // should be formated this way 11999998888, without parentheses, dots, dashs or hyphens
             $table->string('cellphone')->nullable(false);
 
             $table->unsignedInteger('customer_id')->nullable(false);
