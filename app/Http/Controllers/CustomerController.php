@@ -38,7 +38,6 @@ class CustomerController extends Controller
             'name' => 'required|string',
             'email' => 'required|email',
             'telephone' => ['required',  new PhoneNumber],
-            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         // if got errors
@@ -49,6 +48,10 @@ class CustomerController extends Controller
 
         $customer = new Customer();
         $customer->fill($request->all());
+
+        // get auth user id
+        $customer->user_id = $request->user()->id;
+
         $customer->save();
 
         return new CustomerResource($customer);
@@ -82,7 +85,8 @@ class CustomerController extends Controller
             'name' => 'string',
             'email' => 'email',
             'telephone' => ['filled', new PhoneNumber],
-            'user_id' => 'integer|exists:users,id',
+            // validate user id from request, if it's filled
+            'user_id' => 'filled|integer|exists:users,id',
         ]);
 
         // if got errors
@@ -93,6 +97,15 @@ class CustomerController extends Controller
 
         // get customer from db
         $customer = Customer::findOrFail($id);
+
+        // check if the customer belongs to the auth user
+        if ($customer->user_id != $request->user()->id)
+        {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
         // updated it
         $customer->fill($request->all());
         $customer->save();
@@ -103,15 +116,25 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         // get costumer
         $customer = Customer::findOrFail($id);
 
+        // check if the customer belongs to the auth user
+        if ($customer->user_id != $request->user()->id)
+        {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
         // it does not delete his/her dependents
+        // and this table has soft delete
         $customer->delete();
 
         return response()->json([

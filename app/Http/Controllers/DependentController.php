@@ -39,7 +39,6 @@ class DependentController extends Controller
             'email' => 'required|email',
             'cellphone' => ['required',  new PhoneNumber],
             'customer_id' => 'required|integer|exists:customers,id',
-            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         // if get errors
@@ -50,6 +49,10 @@ class DependentController extends Controller
 
         $dependent = new Dependent();
         $dependent->fill($request->all());
+
+        // get auth user id
+        $dependent->user_id = $request->user()->id;
+
         $dependent->save();
 
         return new DependentResource($dependent);
@@ -84,7 +87,8 @@ class DependentController extends Controller
             'email' => 'email',
             'cellphone' => ['filled',  new PhoneNumber],
             'customer_id' => 'integer|exists:customers,id',
-            'user_id' => 'integer|exists:users,id',
+            // validate user id from request, if it's filled
+            'user_id' => 'filled|integer|exists:users,id',
         ]);
 
         // if got errors
@@ -95,6 +99,15 @@ class DependentController extends Controller
 
         // get dependent from db
         $dependent = Dependent::findOrFail($id);
+
+        // check if the customer belongs to the auth user
+        if ($dependent->user_id != $request->user()->id)
+        {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
         // updated it
         $dependent->fill($request->all());
         $dependent->save();
@@ -105,15 +118,24 @@ class DependentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         // get dependente
         $dependent = Dependent::findOrFail($id);
 
-        // it does not delete his/her dependents
+        // check if the customer belongs to the auth user
+        if ($dependent->user_id != $request->user()->id)
+        {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
+        // deletes for real the dependent, this table do not use soft delete
         $dependent->delete();
 
         return response()->json([
