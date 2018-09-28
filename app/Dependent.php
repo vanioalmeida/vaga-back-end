@@ -19,4 +19,12 @@ class Dependent extends Model
         'customer_id',
         'user_id'
     ];
+
+    /**
+     * Set relationship between Dependent and Customer
+     */
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer');
+    }
 }

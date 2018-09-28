@@ -39,4 +39,12 @@ class Customer extends Model
     protected $hidden = [
         'deleted_at',
     ];
+
+    /**
+     * Set relationship between Dependent and Customer
+     */
+    public function dependents()
+    {
+        return $this->hasMany('App\Dependent');
+    }
 }

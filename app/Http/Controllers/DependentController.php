@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\Dependent as DependentResource;
+use App\Http\Resources\Customer as CustomerResource;
 use App\Rules\PhoneNumber;
 use App\Requests;
 use App\Dependent;
@@ -70,6 +71,23 @@ class DependentController extends Controller
         $dependent = Dependent::findOrFail($id);
 
         return new DependentResource($dependent);
+    }
+
+    /**
+     * Display the specified customer of a dependent.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showCustomer($id)
+    {
+        $dependent = Dependent::findOrFail($id);
+
+        // get customer of the dependent
+        $customer = $dependent->customer;
+
+        // return as a resource
+        return new CustomerResource($customer);
     }
 
     /**

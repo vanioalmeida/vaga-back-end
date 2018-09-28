@@ -37,6 +37,8 @@ Route::post('customer', 'CustomerController@store')->middleware('auth:api');
 Route::put('customer/{id}', 'CustomerController@update')->middleware('auth:api');
 // Delete a customer
 Route::delete('customer/{id}', 'CustomerController@destroy')->middleware('auth:api');
+// Show all dependents of a customer
+Route::get('customer/{id}/dependents', 'CustomerController@showDependents')->middleware('auth:api');
 
 // List all dependents
 Route::get('dependents', 'DependentController@index');
@@ -48,3 +50,10 @@ Route::post('dependent', 'DependentController@store')->middleware('auth:api');
 Route::put('dependent/{id}', 'DependentController@update')->middleware('auth:api');
 // Delete a dependent
 Route::delete('dependent/{id}', 'DependentController@destroy')->middleware('auth:api');
+// Show customer of a given dependent
+Route::get('dependent/{id}/customer', 'DependentController@showCustomer')->middleware('auth:api');
+
+// Lista all customers user
+Route::get('user/{id}/customers', 'UserController@customers')->middleware('auth:api');
+// Lista all customers user
+Route::get('user/{id}/dependent', 'UserController@dependents')->middleware('auth:api');

@@ -27,4 +27,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Set relationship between User and Customers
+     */
+    public function customers()
+    {
+        return $this->hasMany('App\Customer');
+    }
+
+    /**
+     * Set relationship between User and Dependents
+     */
+    public function dependents()
+    {
+        return $this->hasMany('App\Dependent');
+    }
 }
