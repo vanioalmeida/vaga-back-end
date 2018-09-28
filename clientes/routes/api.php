@@ -16,6 +16,11 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('/',function() {
+    return response()->json([
+        'message'=> 'Raiz sistema Cliente/Dependente'
+    ]);
+});
 
 //Rotas para cadastro de Usuário
 Route::post('login', 'Api\UserController@login')->name('login');
