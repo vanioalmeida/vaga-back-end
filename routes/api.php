@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+// Routes for creating a user and auth
 Route::group([
     'prefix' => 'auth'
 ], function () {
@@ -57,3 +58,9 @@ Route::get('dependent/{id}/customer', 'DependentController@showCustomer')->middl
 Route::get('user/{id}/customers', 'UserController@customers')->middleware('auth:api');
 // Lista all customers user
 Route::get('user/{id}/dependent', 'UserController@dependents')->middleware('auth:api');
+
+Route::fallback(function() {
+    return response()->json([
+        'message' => 'Invalid route'
+    ], 404);
+});

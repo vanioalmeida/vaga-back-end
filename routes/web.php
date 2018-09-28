@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::fallback(function() {
+    return redirect('/', 301);
+});
