@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.6.36
+    container_name: db
+    restart: always
+    environment:
+      - MYSQL_DATABASE=golaw
+      - MYSQL_ROOT_PASSWORD=vaga
+    networks:
+      - api
+    volumes:
+      - db-data:/var/lib/mysql
+  app:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    networks:
+      - api
+
+volumes:
+  db-data:
+
+networks:
+  api:
